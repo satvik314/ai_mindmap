@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mind Map Generator</title>
+</head>
+<body>
+    <h1>Mind Map Generator</h1>
+    <form id="mindmap-form">
+        <input type="text" id="text-input" placeholder="Enter your text">
+        <button type="submit">Generate</button>
+    </form>
+
+    <div id="mindmap-result"></div>
+
+    <script>
+        const form = document.getElementById('mindmap-form');
+        form.addEventListener('submit', (event) => {
+            event.preventDefault(); // Prevent default form submission
+
+            const text = document.getElementById('text-input').value;
+            fetch('/generate_mindmap', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: text })
+            })
+            .then(response => response.text())
+            .then(mindmap_html => {
+                document.getElementById('mindmap-result').innerHTML = mindmap_html;
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
