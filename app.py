@@ -1,32 +1,26 @@
-import networkx as nx
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
-from dotenv import load_dotenv
-load_dotenv()
+from mindmap_utils import *
+from phi.assistant import Assistant
+from phi.llm.anyscale import Anyscale
 
-from mindmap_utils import CreateMindmap
+import streamlit as st
+import streamlit.components.v1 as components
 
-app = FastAPI()
-
-
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
-
-app.mount("/static", StaticFiles(directory="static"), name="static")  
-templates = Jinja2Templates(directory="templates")
-
-@app.get("/", response_class=HTMLResponse)
-async def root(request: Request):
-    return templates.TemplateResponse("index2.html", {"request": request})
+st.title("🧘 Learn through Mindmaps")
+st.write("🚀 An interactive mindmap generator powered by AI!")
 
 
-@app.post("/generate_mindmap")
-async def generate_mindmap(request: Request):
-    data = await request.json()
-    text = data.get("text")
+mindmap_assistant = Assistant(
+    llm = Anyscale(model = "mistralai/Mixtral-8x7B-Instruct-v0.1",
+                   api_key = st.secrets['ANYSCALE_API_TOKEN']
+                   ),
+    description = "You create Mindmaps to learn effectively",
+    output_model = Mindmap
+)
 
-    if not text:
-        return {"error": "Please provide the 'text' field"}
+topic = st.text_input("What do you want to learn about?")
 
-    mindmap_html = CreateMindmap(text)
-    return HTMLResponse(content=mindmap_html)
+if topic:
+    mindmap_output = mindmap_assistant.run(topic)
+    mindmap_html = visualize_interactive_mindmap(mindmap_output)    
+    # st.write(mindmap_html, unsafe_allow_html=True)
+    components.html(mindmap_html, height=600)
