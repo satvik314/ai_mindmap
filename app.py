@@ -15,8 +15,7 @@ db_client = supabase.create_client(supabase_url, supabase_key)
 st.title("🧘 Learn through Mindmaps")
 st.write("🚀 An interactive mindmap generator powered by AI!")
 st.markdown("""
-- Created by [Build Fast with AI](https://buildfastwithai.com/genai-course)
-- Join the [Whatsapp Group](https://chat.whatsapp.com/BmE9HoWQ3irKt9gG8LshGX)        
+- Created by Build Fast with AI. Join the [Community](https://chat.whatsapp.com/BmE9HoWQ3irKt9gG8LshGX)        
 """)
 
 
