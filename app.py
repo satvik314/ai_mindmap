@@ -34,8 +34,8 @@ placeholder = st.empty()
 with placeholder.container():
    st.code("""
             Try:
+            Philosophy
             String Theory
-            Concept of Dualism
             """, language= None)
 
 if topic:
